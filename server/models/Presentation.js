@@ -19,7 +19,8 @@ const presentationSchema = new Schema (
             required: true
         },
         templateId: {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Template',
             required: true,
         },
         slides: [{
