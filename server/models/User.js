@@ -1,11 +1,34 @@
-const mongoose = require(mongoose);
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 
 const userSchema = new Schema (
     {
-
-    }
+        username: {
+          type: String,
+          required: true,
+          unique: true
+        },
+        email: {
+          type: String,
+          required: true,
+          unique: true
+        },
+        password: {
+          type: String,
+          required: true
+        },
+        savedFigures: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'HistoricalFigure'
+        }],
+        presentations: [{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Presentation'
+        }]
+      }, {
+        timestamps: true
+      }
 );
 
 
@@ -26,11 +49,7 @@ userSchema.methods.comparePassword = async function (userPassword) {
 };
 
 
+
 const User = mongoose.model('User', userSchema);
 
-
-
-
-
-
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;
