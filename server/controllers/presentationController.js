@@ -71,6 +71,7 @@ const getUserPresentationbyId = async (req, res) => {
     try {
         const presentation = await Presentation.findById(req.params.id)
             .populate('figureId')
+            .populate('templateId')
             .populate('userId', 'username');
 
         if (!presentation) {

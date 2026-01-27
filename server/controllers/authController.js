@@ -1,0 +1,248 @@
+const { User } = require('..models');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+//generate token
+const generateToken = (id) => {
+   return jwt.sign({ id }, process.env.JWT_SECRET, {
+     expiresIn: process.env.JWT_EXPIRE || '30d'
+   });
+};
+
+// @ desc   Register new user
+// @route   POST /api/auth/resister
+// @access  Public
+const register = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
+
+        
+        // Validate input
+        if (!username || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                error: 'Please provide username, email, and password'
+            });
+        }
+
+        //Check if user exists already 
+        const userExists = await User.findOne({ $or: [{ email }, { username }]})
+        if (userExists) {
+            return res.status(400).json({
+                success: false,
+                error: 'User already exists with that email or username'
+            });
+        }
+        
+        //Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+
+        //Create a user 
+        const user = await User.create({
+            username,
+            email,
+            password: hashedPassword
+        });
+
+        //Generate token
+        const token = generateToken(user._id);
+
+        res.status(201).json({
+            success: true,
+            data: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                token
+            }
+        });
+       } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
+       }
+     };
+
+
+const login = async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      //Validate input
+      if (!email || !password) {
+        return res.status(400).json({
+            success: false,
+            error: 'Invalid credentials'
+        });
+      }
+
+      //Check password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({
+            success: false,
+            error: 'Invalid credentials'
+        });
+      }
+
+
+      //Generate sign in token
+      const token = generateToken(user._id);
+
+      res.json({
+        success: true,
+        data: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            token
+        }
+      });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message
+
+        });
+    }
+};
+
+
+// @desc Logout user
+// @route POST /api/auth/logout
+// @access Private
+
+// 
+
+const getAuthenticatedUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+
+
+        res.json({
+            success,
+            data: user
+        });
+    } catch (err) {
+        res.status(500).json({
+           success: false,
+           error: err.message 
+        });
+    }
+};
+
+
+const updatePassword = async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                error: 'Please provide current and new password'
+            });
+        }
+
+
+        const user = await User.findById(req.user.id).select('+password');
+
+        // Check current password
+        const isMatch = await bcrypt.compare(currentPassword, user.hashedPassword);
+        if (!ismatch) {
+            return res.status(401).json({
+                success: false,
+                error: 'Current password is incorrect'
+            });
+        }
+
+
+        //Hash new password
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
+        await user.save();
+
+        //Generate new token
+        const token = generateToken(user._id);
+
+        res.json({
+            success: truw,
+            data: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                token
+            }
+        });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message
+        });
+    }
+};
+
+const resetPassword = async (req, res) => {
+    try {
+      const { newPassword } = req.body;
+      const { resetToken } = req.params;
+  
+      if (!newPassword) {
+        return res.status(400).json({
+          success: false,
+          error: 'Please provide a new password'
+        });
+      }
+  
+      // Verify reset token
+      const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.id);
+  
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          error: 'Invalid reset token'
+        });
+      }
+  
+      // Hash new password
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(newPassword, salt);
+      await user.save();
+  
+      // Generate new login token
+      const token = generateToken(user._id);
+  
+      res.json({
+        success: true,
+        data: {
+          id: user._id,
+          username: user.username,
+          email: user.email,
+          token
+        }
+      });
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        error: 'Invalid or expired reset token'
+      });
+    }
+  };
+
+
+
+
+
+module.exports = {
+    register,
+    generateToken, 
+    login,
+    getAuthenticatedUser,
+    resetPassword,
+    updatePassword,
+    
+}
