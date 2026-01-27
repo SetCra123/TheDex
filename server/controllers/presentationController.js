@@ -115,4 +115,39 @@ const updatePresentation = async (req, res) => {
       res.status(400).json({ success: false, error: err.message });
     }
 
-},
+};
+
+const deletePresentation = async () => {
+    try {
+        const presentation = await Presentation.findById(req.params.id);
+
+        if (!presentation) {
+            return res.status(404).json({
+                success: false,
+                error: 'Presentation not found'
+            });
+        }
+
+        if (presentation.userId.toString() !== req.user.id) {
+            return res.status(403).json({ success: false, error: 'Access denied'});
+        }
+
+        await Presentation.deleteOne();
+
+        res.json({
+            success: true,
+            data: {}
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+      }
+};
+
+
+module.exports = {
+    createPresentation,
+    getUserPresentation,
+    getUserPresentationbyId,
+    updatePresentation,
+    deletePresentation,
+};

@@ -91,3 +91,10 @@ const getPopularFigures = async (req, res) => {
     }
 
 };
+
+module.exports = {
+    getPopularFigures,
+    createFigure,
+    getFigureById,
+    searchFigures, 
+}
