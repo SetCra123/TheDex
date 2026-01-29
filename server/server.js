@@ -19,7 +19,7 @@ app.use(routes);
 app.use((err, req, res, next) => {
   console.error(err.stack);
   console.log(`${req.method} ${req.url}`);
-  res.status(500).json({
+  res.status(err.statusCode || 500).json({
     success: false,
     message: 'Something went wrong!',
     error: err.message,

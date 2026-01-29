@@ -152,7 +152,7 @@ const updatePassword = async (req, res) => {
 
         // Check current password
         const isMatch = await bcrypt.compare(currentPassword, user.hashedPassword);
-        if (!ismatch) {
+        if (!isMatch) {
             return res.status(401).json({
                 success: false,
                 error: 'Current password is incorrect'
@@ -169,7 +169,7 @@ const updatePassword = async (req, res) => {
         const token = generateToken(user._id);
 
         res.json({
-            success: truw,
+            success: true,
             data: {
                 id: user._id,
                 username: user.username,
@@ -244,5 +244,5 @@ module.exports = {
     getAuthenticatedUser,
     resetPassword,
     updatePassword,
-    
+
 }
