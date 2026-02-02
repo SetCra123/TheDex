@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {
     getAllTemplates,
-    getTemplateById
-} = require('../controllers/templateController');
+    getTemplatesById
+} = require('../../controllers/templateController');
 
 // @route   GET /api/templates
 // @desc    Get all active templates
@@ -13,7 +13,7 @@ router.get('/', getAllTemplates);
 // @route   GET /api/templates/:id
 // @desc    Get single template by ID
 // @access  Public
-router.get('/:id', getTemplateById);
+router.get('/:id', getTemplatesById);
 
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { User } = require('..models');
+const { User } = require('../models');
 
 
 
@@ -154,4 +154,15 @@ const getSavedFigures = async (req, res) => {
         error: err.message
       });
     }
+}
+
+module.exports = {
+  getProfile,
+  updateProfile,
+  deleteAccount,
+  saveFigure,
+  removeSavedFigure,
+  getSavedFigures,
+
+
 }

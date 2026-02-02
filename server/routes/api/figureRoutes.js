@@ -1,18 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const {
-    searcgFigures,
+    searchFigures,
     getFigureById,
     createFigure,
     getPopularFigures 
-} = require('../controllers/figureController');
-const { protect, authorize } = require('../middleware/auth');
+} = require('../../controllers/figureController');
+const { protect, authorize } = require('../../utils/auth');
 
 
 // @route GET /api/figures/search
 // @desc Search historical figures with filters
 // @ access Public
-router.get('/search', searcgFigures);
+router.get('/search', searchFigures);
 
 // @route GET /api/figures/popular
 // @desc Get yop 10 most viewed figures

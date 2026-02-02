@@ -1,4 +1,4 @@
-const { HistoricalFigures } = require('..models');
+const { HistoricalFigures } = require('../models');
 
 //search historical figure 
 const searchFigures = async (req, res) => {

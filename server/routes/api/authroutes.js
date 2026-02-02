@@ -8,8 +8,8 @@ const {
     updatePassword,
     forgotPassword,
     resetPassword,
-} = require('../controllers/authController');
-const { protect } = require('..middleware/auth');
+} = require('../../controllers/authController');
+const { protect } = require('../../utils/auth');
 
 //----------------PUBLIC ROUTES-------------//
 

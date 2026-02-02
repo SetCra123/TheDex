@@ -7,8 +7,8 @@ const {
     saveFigure,
     removeSavedFigure,
     getSavedFigures
-} = require('../controllers/userController');
-const { protect } = require('../middleware/auth');
+} = require('../../controllers/userController');
+const { protect } = require('../../utils/auth');
 
 //------------------ALL ROUTES PROTECTED------------------//
 router.use(protect);

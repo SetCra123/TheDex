@@ -1,4 +1,4 @@
-const { Presentation, Template } = require('..models');
+const { Presentation, Template } = require('../models');
 
 
 
@@ -67,7 +67,7 @@ const getUserPresentation = async (req, res) => {
 };
 
 
-const getUserPresentationbyId = async (req, res) => {
+const getUserPresentationById = async (req, res) => {
     try {
         const presentation = await Presentation.findById(req.params.id)
             .populate('figureId')
@@ -148,7 +148,7 @@ const deletePresentation = async () => {
 module.exports = {
     createPresentation,
     getUserPresentation,
-    getUserPresentationbyId,
+    getUserPresentationById,
     updatePresentation,
     deletePresentation,
 };

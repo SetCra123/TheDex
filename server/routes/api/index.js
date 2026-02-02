@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
 const figureRoutes = require('./figureRoutes');
-const presentationRoutes = require('.presentationRoutes/');
+const presentationRoutes = require('./presentationRoutes');
 const userRoutes = require('./userRoutes');
 const authRoutes = require('./authroutes');
 const templateRoutes = require('./templateRoutes');

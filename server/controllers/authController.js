@@ -1,4 +1,4 @@
-const { User } = require('..models');
+const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -233,16 +233,66 @@ const resetPassword = async (req, res) => {
     }
   };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'No user found with that email'
+      });
+    }
+
+    // Generate reset token (send this via email)
+    const resetToken = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({
+      success: true,
+      message: err.message
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+
+  }
+};
 
 
+
+const logout = async (req, res) => {
+  try {
+    //Logout is handled client side by removing the token
+    // Endpoint is used for logginh, tracking purposes
+    res.json({
+      success: true,
+      message: 'User logged out successfully'
+    });
+  } catch (err) {
+      res.status(500).json({
+        success: false,
+        error: err.message
+      });
+  }
+};
 
 
 module.exports = {
     register,
     generateToken, 
     login,
+    logout,
     getAuthenticatedUser,
     resetPassword,
     updatePassword,
+    forgotPassword,
 
 }
