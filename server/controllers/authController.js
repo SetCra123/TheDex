@@ -69,11 +69,21 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
+      console.log('Login attempt with:', req.body);
       const { email, password } = req.body;
 
       //Validate input
       if (!email || !password) {
+        console.log('Missing email or password');
         return res.status(400).json({
+            success: false,
+            error: 'Invalid credentials'
+        });
+      }
+
+      const user = await User.findOne({ email }).select('+password');
+      if (!user) {
+        return res.status(401).json({
             success: false,
             error: 'Invalid credentials'
         });
@@ -102,7 +112,8 @@ const login = async (req, res) => {
         }
       });
     } catch (err) {
-        res.status(500).json({
+      console.error('Login error:', err);  
+      res.status(500).json({
             success: false,
             error: err.message
 
@@ -151,7 +162,7 @@ const updatePassword = async (req, res) => {
         const user = await User.findById(req.user.id).select('+password');
 
         // Check current password
-        const isMatch = await bcrypt.compare(currentPassword, user.hashedPassword);
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
             return res.status(401).json({
                 success: false,

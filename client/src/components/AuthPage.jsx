@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, BookOpen } from 'luicide-react';
-import { authAPI } from '../utils/api;'
+import { Eye, EyeOff, BookOpen } from 'lucide-react';
+import { authAPI } from '../utils/API'
 
 //AuthPage Component - hanles both login and register
 
@@ -48,7 +48,7 @@ const AuthPage = () => {
 
             // Store token in localStorage
             localStorage.setItem('token', data.data.token);
-            localStorgae.setItem('user', JSON.stringify(data.data));
+            localStorage.setItem('user', JSON.stringify(data.data));
 
             //Redirect to home page
             window.location.href = '/home';
@@ -124,7 +124,7 @@ return (
                     )}
 
                     <div>
-                       <label htmlFor="email" classname="block text-sm font-medium text-gray-700 mb-1">
+                       <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                          Email
                        </label>
                        <input 
@@ -159,7 +159,7 @@ return (
                                 onClick={() => setShowPassword(!showPassword)}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-700"
                             >
-                                {showPassword ? <EyeOff classname="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>  
                             </div>
                         </div>
