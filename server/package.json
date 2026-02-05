@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server.js",
     "watch": "nodemon",
-    "seed": ""
+    "seed": "node seeds/seedHistoricalFigures.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
