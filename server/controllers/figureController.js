@@ -1,10 +1,12 @@
-const { HistoricalFigures } = require('../models');
+const { HistoricalFigure } = require('../models');
 
 //search historical figure 
 const searchFigures = async (req, res) => {
     try {
+        console.log('HistoricalFigure model:', HistoricalFigure);
         const { query, category, period } = req.query;
         let filter = {}; 
+
 
         // filter by text
         if (query) {
@@ -19,7 +21,7 @@ const searchFigures = async (req, res) => {
             filter.timelinePeriod = period;
         }
 
-        const figures = await HistoricalFigures.find(filter)
+        const figures = await HistoricalFigure.find(filter)
             .select('name birthYear deathYear occupation imageUrl category')
             .limit(20);
 
@@ -36,7 +38,7 @@ const searchFigures = async (req, res) => {
 //search figure by Id
 const getFigureById = async (req, res) => {
     try {
-        const figure = await HistoricalFigures.findById(req.params.id);
+        const figure = await HistoricalFigure.findById(req.params.id);
 
         if (!figure) {
             return res.status(404).json({ success: false, error: 'Figure not found'});
@@ -58,7 +60,7 @@ const getFigureById = async (req, res) => {
 //create Historical Figure
 const createFigure = async (req, res) => {
     try {
-        const figure = await HistoricalFigures.create(req.body);
+        const figure = await HistoricalFigure.create(req.body);
         res.status(201).json({
             success: true,
             data: figure
@@ -73,7 +75,7 @@ const createFigure = async (req, res) => {
 
 const getPopularFigures = async (req, res) => {
     try {
-        const figures = await HistoricalFigures.find()
+        const figures = await HistoricalFigure.find()
             .sort({ searchCount: -1 })
             .limit(10)
             .select('name occupation imageUrl searchCount');

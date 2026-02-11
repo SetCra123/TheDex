@@ -79,8 +79,12 @@ return (
                 <p className="text-gray-600 mt-2">Create stunning presentations about history's greatest figures!</p>
             </div>
 
+            <div className="bg-red-500 text-white p-8 text-2xl">
+  If this is RED with white text, Tailwind works!
+</div>
+
             {/* Auth Form Card */}
-            <div className="bg-white rounded-lg shadow-xl p-8">
+            <div className="bg-purple-500 rounded-lg shadow-xl p-8">
                 <div className="flex mb-6">
                     <button
                     onClick={() => setIsLogin(true)}

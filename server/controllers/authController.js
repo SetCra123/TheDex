@@ -16,8 +16,10 @@ const register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        
-        // Validate input
+    console.log('=== REGISTER USER ===');
+    console.log('Registration data:', { username, email });
+    
+    // Validate input
         if (!username || !email || !password) {
             return res.status(400).json({
                 success: false,
@@ -34,16 +36,13 @@ const register = async (req, res) => {
             });
         }
         
-        //Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
+        
 
         //Create a user 
         const user = await User.create({
             username,
             email,
-            password: hashedPassword
+            password
         });
 
         //Generate token
@@ -67,59 +66,77 @@ const register = async (req, res) => {
      };
 
 
-const login = async (req, res) => {
-    try {
-      console.log('Login attempt with:', req.body);
-      const { email, password } = req.body;
-
-      //Validate input
-      if (!email || !password) {
-        console.log('Missing email or password');
-        return res.status(400).json({
-            success: false,
-            error: 'Invalid credentials'
-        });
-      }
-
-      const user = await User.findOne({ email }).select('+password');
-      if (!user) {
-        return res.status(401).json({
-            success: false,
-            error: 'Invalid credentials'
-        });
-      }
-
-      //Check password
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(401).json({
-            success: false,
-            error: 'Invalid credentials'
-        });
-      }
-
-
-      //Generate sign in token
-      const token = generateToken(user._id);
-
-      res.json({
-        success: true,
-        data: {
-            id: user._id,
-            username: user.username,
-            email: user.email,
-            token
+     const login = async (req, res) => {
+      try {
+        
+        const { email, password } = req.body;
+        
+        console.log('1️⃣ Login attempt with:', req.body);
+  
+        // Validate input
+        if (!email || !password) {
+          console.log('❌ Missing email or password');
+          return res.status(400).json({
+              success: false,
+              error: 'Please provide email and password'
+          });
         }
-      });
-    } catch (err) {
-      console.error('Login error:', err);  
-      res.status(500).json({
-            success: false,
-            error: err.message
+  
+        console.log('2️⃣ Finding user...');
+        const user = await User.findOne({ email }).select('+password');
+        
+        console.log('3️⃣ User found:', user ? 'Yes' : 'No');
+        
+        if (!user) {
+          console.log('❌ User not found in database');
+          return res.status(401).json({
+              success: false,
+              error: 'Invalid credentials'
+          });
+        }
+  
+        console.log('4️⃣ Stored password hash:', user.password);
+        console.log('5️⃣ Input password:', password);
 
+        console.log('6️⃣ About to compare passwords...');
+  
+        // Check password
+        const isMatch = await user.comparePassword(password);
+        
+        console.log('7️⃣ Password match result:', isMatch);
+        
+        if (!isMatch) {
+          console.log('❌ Passwords do not match');
+          return res.status(401).json({
+              success: false,
+              error: 'Invalid credentials'
+          });
+        }
+  
+        console.log('8️⃣ ✅ Login successful! Generating token...');
+  
+        // Generate sign in token
+        const token = generateToken(user._id);
+  
+        console.log('9️⃣ ✅ Sending response with token');
+  
+        res.json({
+          success: true,
+          data: {
+              id: user._id,
+              username: user.username,
+              email: user.email,
+              token
+          }
         });
-    }
-};
+      } catch (err) {
+        console.error('💥 Login error:', err);  
+        res.status(500).json({
+              success: false,
+              error: err.message
+          });
+      }
+  };
 
 
 // @desc Logout user
