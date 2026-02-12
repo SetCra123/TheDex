@@ -405,7 +405,7 @@ const figuresAPI = {
                 <div className="border-t border-gray-200 pt-6 mt-6">
                   <button
                     onClick={() => {
-                      window.location.href = `/create-presentation?figureId=${selectedFigure._id}`;
+                      window.location.href = `/select-template?figureId=${selectedFigure._id}`;
                     }}
                     className="w-full bg-indigo-600 text-white py-3 px-6 rounded-lg hover:bg-indigo-700 transition font-semibold"
                   >

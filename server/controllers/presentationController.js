@@ -6,7 +6,7 @@ const createPresentation = async (req, res) => {
     try {
         const { figureId, templateId, title } = req.body;
 
-        const template = await Template.findbyId(templateId); 
+        const template = await Template.findById(templateId); 
         if (!template) {
             return res.status(404).json({
                 success: false,
@@ -16,9 +16,10 @@ const createPresentation = async (req, res) => {
 
         const slides = template.slideStructure.map((slide, index) => ({
             slideNumber: index + 1,
-            slideype: slide.slideType, 
+            slideType: slide.slideType, 
             content: slide.defaultContent,
             backgroundTheme: template.colorSchemes[0]?.name || 'default'
+        
         }));
 
         const presentation = await Presentation.create({
@@ -82,7 +83,7 @@ const getUserPresentationById = async (req, res) => {
         }
 
         res.json({
-            success: truen,
+            success: true,
             data: presentation
         });
     } catch (err) {

@@ -21,6 +21,7 @@ const getAllTemplates = async (req, res) => {
 const getTemplatesById = async (req, res) => {
     try {
         const template = await Template.findById(req.params.id);
+        
 
         if (!template) {
             return res.status(404).json({

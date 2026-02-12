@@ -1,13 +1,13 @@
 // import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'http://localhost:5000/api';
 
 // const apiClient = axios.create({
 //     baseURL: API_BASE_URL,
 // });
 
 // Helper function to get auth headers
-const getAuthHeaders = () => {
+ export const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
     return {
         'Content-Type': 'application/json',
@@ -17,7 +17,7 @@ const getAuthHeaders = () => {
 
 
 // Helper function to handle API responses
-const handleResponse = async (response) => {
+export async function handleResponse(response) {
     const data = await response.json();
 
     if (!response.ok) {
@@ -25,7 +25,7 @@ const handleResponse = async (response) => {
     }
 
     return data;
-};
+}
 
 //------------------------------------------------
 // AUTH ENDPOINTS
@@ -264,9 +264,13 @@ export const userAPI = {
 
 // Default export with all APIs
 export default {
+    baseURL: API_BASE_URL,
+    headers: getAuthHeaders,
+    response: handleResponse,
     auth: authAPI,
     figures: figuresAPI,
     presentations: presentationsAPI,
     templates: templatesAPI,
-    user: userAPI
+    user: userAPI,
+
   };
