@@ -131,7 +131,7 @@ export const figuresAPI = {
 export const presentationsAPI = {
     // Get user's presentations
     getUserPresentations: async () => {
-        const response = await fetch(`${API_BASE_URL}/prsentations`, {
+        const response = await fetch(`${API_BASE_URL}/presentations`, {
             headers: getAuthHeaders()
         });
         return handleResponse(response);
